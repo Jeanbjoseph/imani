@@ -1,18 +1,17 @@
 import streamlit as st
-from openai import AzureOpenAI
 from azure.identity import ClientSecretCredential
+from openai import AzureOpenAI
 
-# Variáveis globais para o cliente e deployment
+# Globais para cliente e deployment
 client = None
 deployment = None
 
 def configure_azure(azure_endpoint: str, deployment_name: str):
     """
-    Inicializa o cliente AzureOpenAI usando credenciais armazenadas em st.secrets.
-    Remove qualquer hard-coded secret do código para evitar alertas de detecção.
+    Inicializa o cliente AzureOpenAI usando Service Principal (AAD) via ClientSecretCredential.
     """
     try:
-        # Credenciais sem hard-code, lidas do Streamlit Secrets
+        # Lê credenciais do AAD de st.secrets
         tenant_id = st.secrets["BLOB_TENANT_ID"]
         client_id = st.secrets["BLOB_CLIENT_ID"]
         client_secret = st.secrets["BLOB_CLIENT_SECRET"]
@@ -26,12 +25,12 @@ def configure_azure(azure_endpoint: str, deployment_name: str):
         global client, deployment
         deployment = deployment_name
         client = AzureOpenAI(
-            endpoint=azure_endpoint,
+            azure_api_base=azure_endpoint,
+            azure_api_version="2025-01-01-preview",
             deployment_name=deployment_name,
-            credential=credential,
-            api_version="2025-01-01-preview"
+            credential=credential
         )
-        st.sidebar.success("✅ Azure OpenAI configurado com Service Principal sem expor secrets no código.")
+        st.sidebar.success("✅ Azure OpenAI configurado (AAD Service Principal)")
     except Exception as e:
         st.error(f"❌ Falha ao configurar Azure OpenAI: {e}")
         client = None
@@ -40,15 +39,15 @@ def configure_azure(azure_endpoint: str, deployment_name: str):
 
 def extrair_recomendacoes_ia(texto: str) -> list[str]:
     """
-    Extrai recomendações técnicas usando o cliente AzureOpenAI configurado.
+    Extrai recomendações técnicas do texto usando AzureOpenAI.
     """
-    if client is None or deployment is None:
+    if client is None or not deployment:
         st.error("❌ AzureOpenAI não está configurado. Verifique suas chaves em st.secrets.")
         return []
 
     prompt = [
-        {"role": "system", "content": "Você é um especialista em engenharia que extrai recomendações técnicas."},
-        {"role": "user",   "content": f"Extraia as recomendações técnicas (bullets) do texto a seguir:\n\n{texto}"}
+        {"role": "system", "content": "Você é um especialista em engenharia que extrai recomendações técnicas de documentos."},
+        {"role": "user",   "content": f"Extraia as recomendações técnicas do seguinte texto em bullets:\n\n{texto}"}
     ]
     try:
         resp = client.chat.completions.create(
