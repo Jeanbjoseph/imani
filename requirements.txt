@@ -5,6 +5,7 @@ streamlit>=1.0.0
 
 # manipulação de dados
 pandas>=1.5.0
+openpyxl>=3.0.0        # para leitura/escrita de arquivos .xlsx
 
 # extração de texto de PDFs
 PyMuPDF>=1.21.0
