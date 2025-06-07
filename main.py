@@ -1,4 +1,8 @@
 import streamlit as st
+
+# Configura o layout e título da página antes de qualquer chamada Streamlit
+st.set_page_config(page_title="IMANI: Analisador IA + Azure Blob", layout="wide")
+
 import pandas as pd
 import fitz
 from io import BytesIO
@@ -62,7 +66,7 @@ except Exception as e:
 # ================================
 # Interface do IMANI
 # ================================
-st.set_page_config(page_title="IMANI: Analisador IA + Azure Blob", layout="wide")
+
 st.title("📂 IMANI: Analisador de Relatórios utilizando IA")
 
 somente_diagnostico = st.sidebar.checkbox("🩺 Executar apenas Diagnóstico (sem IA)", value=False)
