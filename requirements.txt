@@ -1,0 +1,17 @@
+# requirements.txt
+
+# interface web
+streamlit>=1.0.0
+
+# manipulação de dados
+pandas>=1.5.0
+
+# extração de texto de PDFs
+PyMuPDF>=1.21.0
+
+# Azure SDK para Blob Storage e autenticação
+azure-storage-blob>=12.14.0
+azure-identity>=1.12.0
+
+# cliente OpenAI para AzureOpenAI
+openai>=0.27.0
