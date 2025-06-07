@@ -22,6 +22,11 @@ import azure_ia  # configure_azure(...) e extrair_recomendacoes_ia(...)
 secrets = st.secrets
 
 # Azure OpenAI
+# Carrega credenciais de Azure AD do Streamlit Secrets para DefaultAzureCredential
+import os
+os.environ["AZURE_CLIENT_ID"] = secrets.get("AZURE_CLIENT_ID", "")
+os.environ["AZURE_TENANT_ID"] = secrets.get("AZURE_TENANT_ID", "")
+os.environ["AZURE_CLIENT_SECRET"] = secrets.get("AZURE_CLIENT_SECRET", "")
 azure_endpoint = secrets["AZURE_OPENAI_ENDPOINT"].rstrip("/")
 deployment_name = secrets["AZURE_OPENAI_DEPLOYMENT_NAME"]
 azure_ia.configure_azure(azure_endpoint, deployment_name)
