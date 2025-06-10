@@ -45,7 +45,7 @@ def extrair_recomendacoes_ia(texto: str) -> list[str]:
         st.error("❌ AzureOpenAI não está configurado. Verifique suas chaves em st.secrets.")
         return []
 
-      prompt = [
+    prompt = [
         {
             "role": "system",
             "content": "Você é um especialista em engenharia que extrai recomendações técnicas de documentos."
