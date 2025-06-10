@@ -25,8 +25,8 @@ def configure_azure(azure_endpoint: str, deployment_name: str):
         global client, deployment
         deployment = deployment_name
         client = AzureOpenAI(
-            endpoint=azure_endpoint,
-            api_version="2025-01-01-preview",
+            azure_api_base=azure_endpoint,
+            azure_api_version="2025-01-01-preview",
             deployment_name=deployment_name,
             credential=credential
         )
